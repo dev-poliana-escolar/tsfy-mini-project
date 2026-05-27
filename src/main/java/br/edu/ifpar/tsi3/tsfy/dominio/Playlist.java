@@ -19,8 +19,10 @@ public class Playlist {
     private String descricao;
     
     private ArrayList<Musica> musicas;
-    
-    public Playlist() { }
+
+    public Playlist() {
+        this.musicas = new ArrayList<>();
+    }
 
     /// Inicia o array de musicas para playlist
     public Playlist(Usuario dono, String nome, String descricao) {
@@ -30,14 +32,6 @@ public class Playlist {
 
         this.musicas = new ArrayList<>();
     }
-    /*
-    public Playlist(Usuario dono, String nome, String descricao) {
-        this.dono = dono;
-        this.nome = nome;
-        this.descricao = descricao;
-    }
-
-     */
 
     public Usuario getDono() {
         return dono;

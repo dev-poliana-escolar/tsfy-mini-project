@@ -289,7 +289,11 @@ public class TsfyUI {
 
         String titulo = sc.nextLine();
 
-        boolean removeu =fachada.removerMusica(titulo);
+        System.out.println("Digite o intérprete da música:");
+
+        String interprete = sc.nextLine();
+
+        boolean removeu =fachada.removerMusica(titulo,interprete);
 
         if(removeu){
 
@@ -343,11 +347,16 @@ public class TsfyUI {
 
         String tituloMusica = sc.nextLine();
 
+        System.out.println("Digite o intérprete da música:");
+
+        String interpreteMusica = sc.nextLine();
+
         boolean adicionou =
                 fachada.adicionarMusicaNaPlaylist(
                         usuarioLogado.getCpf(),
                         nomePlaylist,
-                        tituloMusica
+                        tituloMusica,
+                        interpreteMusica
                 );
 
         if(adicionou){

@@ -45,18 +45,16 @@ public class FachadaFrontend {
     // MÚSICA
     // =========================
 
-    public boolean cadastrarMusica(String titulo, String compositor,String interprete,double duracao) {
-
-        return controladorDeMusica.cadastrarMusica(
-                titulo,
-                compositor,
-                interprete,
-                duracao
-        );
+    public boolean cadastrarMusica(String titulo,String compositor,String interprete,double duracao) {
+        return controladorDeMusica.cadastrarMusica(titulo,compositor,interprete,duracao);
     }
 
-    public Musica buscarMusica(String titulo) {
-        return controladorDeMusica.buscarMusica(titulo);
+    public ArrayList<Musica> buscarMusicaPorTitulo(String titulo) {
+        return controladorDeMusica.buscarMusicaPorTitulo(titulo);
+    }
+
+    public Musica buscarMusica(String titulo,String interprete) {
+        return controladorDeMusica.buscarMusica(titulo,interprete);
     }
 
     public ArrayList<Musica> listarMusicas() {
@@ -73,11 +71,10 @@ public class FachadaFrontend {
         );
     }
 
-    public boolean removerMusica(String titulo){
+    public boolean removerMusica(String titulo,String interprete){
 
-        return controladorDeMusica.removerMusica(titulo);
+        return controladorDeMusica.removerMusica(titulo,interprete);
     }
-    
     // =========================
     // PLAYLIST
     // =========================
@@ -104,21 +101,16 @@ public class FachadaFrontend {
         );
     }
 
-    public boolean adicionarMusicaNaPlaylist(String cpfUsuario,String nomePlaylist, String tituloMusica) {
+    public boolean adicionarMusicaNaPlaylist(String cpfUsuario,String nomePlaylist, String tituloMusica, String interpreteMusica){ 
 
         Usuario usuario = controladorDeUsuario.buscarUsuarioPorCpf(cpfUsuario);
 
-        Playlist playlist =controladorDePlaylist.buscarPlaylist(
-                        usuario,
-                        nomePlaylist
-                );
+        Playlist playlist =controladorDePlaylist.buscarPlaylist(usuario,nomePlaylist);
 
-        Musica musica = controladorDeMusica.buscarMusica(tituloMusica);
+        Musica musica = controladorDeMusica.buscarMusica(tituloMusica,interpreteMusica);
 
-        return controladorDePlaylist.adicionarMusicaNaPlaylist(
-                playlist,
-                musica
-        );
+        return controladorDePlaylist.adicionarMusicaNaPlaylist(playlist,musica);
+        
     }
 
     public Playlist[] listarPlaylistsDoUsuario(String cpfUsuario){

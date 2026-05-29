@@ -14,22 +14,50 @@ public class MusicaControlador {
 
     public boolean cadastrarMusica(String titulo,String compositor,String interprete,double duracao){
 
-        if (buscarMusica(titulo) != null){
-            return false; // Música já existe
+        for(Musica m : this.musicas){
+
+            boolean mesmoTitulo =m.getTitulo().equalsIgnoreCase(titulo);
+
+            boolean mesmoCompositor =m.getCompositor().equalsIgnoreCase(compositor);
+
+            boolean mesmoInterprete =m.getInterprete().equalsIgnoreCase(interprete);
+
+            if(mesmoTitulo && mesmoCompositor && mesmoInterprete){
+                return false;
+            }
         }
 
-        Musica nova = new Musica(titulo,compositor,interprete,duracao);
+        Musica nova =new Musica(titulo,compositor,interprete,duracao);
 
         this.musicas.add(nova);
 
         return true;
     }
 
-    public Musica buscarMusica(String titulo){
+    public ArrayList<Musica> buscarMusicaPorTitulo(String titulo){
+
+        ArrayList<Musica> musicasEncontradas =new ArrayList<>();
 
         for(Musica m : this.musicas){
 
             if(m.getTitulo().equalsIgnoreCase(titulo)){
+                musicasEncontradas.add(m);
+            }
+        }
+
+        return musicasEncontradas;
+    }
+
+    public Musica buscarMusica(String titulo,String interprete){
+
+        for(Musica m : this.musicas){
+
+            boolean mesmoTitulo =m.getTitulo().equalsIgnoreCase(titulo);
+
+            boolean mesmoInterprete = m.getInterprete().equalsIgnoreCase(interprete);
+
+            if(mesmoTitulo && mesmoInterprete){
+
                 return m;
             }
         }
@@ -39,13 +67,13 @@ public class MusicaControlador {
 
     public boolean editarMusica(String tituloAtual,String novoTitulo,String compositor,String interprete,double duracao){
 
-        Musica musica = buscarMusica(tituloAtual);
+        Musica musica = buscarMusica(tituloAtual,interprete);
 
         if(musica == null){
             return false; 
         }
 
-        if(!tituloAtual.equalsIgnoreCase(novoTitulo) && buscarMusica(novoTitulo) != null){
+        if(!tituloAtual.equalsIgnoreCase(novoTitulo) && buscarMusica(novoTitulo,interprete) != null){
             return false; 
         }
 
@@ -57,9 +85,9 @@ public class MusicaControlador {
         return true;
     }
 
-    public boolean removerMusica(String titulo){
+    public boolean removerMusica(String titulo,String interprete){
 
-        Musica musica = buscarMusica(titulo);
+        Musica musica = buscarMusica(titulo,interprete);
 
         if(musica == null){
             return false;

@@ -1,21 +1,43 @@
 package controladores;
 
-
 import br.edu.ifpar.tsi3.tsfy.dominio.Musica;
 
 import java.util.ArrayList;
 
 public class MusicaControlador {
 
-    public ArrayList<Musica> todasAsMusicas = new ArrayList<>();
+    private ArrayList<Musica> musicas;
 
+    public MusicaControlador() {
+        this.musicas = new ArrayList<>();
+    }
 
-    // Como sei que a música ja não existe?
-    public boolean registrarMusica(String titulo, String compositor, String interprete, Double duracao) {
-        Musica novaMusica = new Musica(titulo, compositor, interprete, duracao);
-        this.todasAsMusicas.add(novaMusica);
+    public boolean cadastrarMusica(String titulo,String compositor,String interprete,double duracao){
+
+        if (buscarMusica(titulo) != null){
+            return false; // Música já existe
+        }
+
+        Musica nova = new Musica(titulo,compositor,interprete,duracao);
+
+        this.musicas.add(nova);
+
         return true;
     }
 
+    public Musica buscarMusica(String titulo){
 
+        for(Musica m : this.musicas){
+
+            if(m.getTitulo().equalsIgnoreCase(titulo)){
+                return m;
+            }
+        }
+
+        return null;
+    }
+
+    public ArrayList<Musica> listarMusicas(){
+        return this.musicas;
+    }
 }

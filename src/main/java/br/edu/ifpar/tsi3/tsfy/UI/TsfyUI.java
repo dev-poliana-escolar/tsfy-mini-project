@@ -5,6 +5,7 @@ import br.edu.ifpar.tsi3.tsfy.dominio.Musica;
 import br.edu.ifpar.tsi3.tsfy.dominio.Playlist;
 import br.edu.ifpar.tsi3.tsfy.dominio.Usuario;
 
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -65,8 +66,10 @@ public class TsfyUI {
 
             System.out.println("1 - Criar nova música");
             System.out.println("2 - Listar músicas");
-            System.out.println("3 - Criar playlist");
-            System.out.println("4 - Adicionar música na playlist");
+            System.out.println("3 - Editar música");
+            System.out.println("4 - Remover música");
+            System.out.println("5 - Criar playlist");
+            System.out.println("6 - Adicionar música na playlist");
             System.out.println("0 - Sair");
 
             String opcao = sc.nextLine();
@@ -79,9 +82,15 @@ public class TsfyUI {
                     listarMusicas();
                     break;
                 case "3":
-                    criarPlaylist(usuarioLogado);
+                    editarMusica();
                     break;
                 case "4":
+                    removerMusica();
+                    break;
+                case "5":
+                    criarPlaylist(usuarioLogado);
+                    break;
+                case "6":
                     adicionarMusicaNaPlaylist(usuarioLogado);
                     break;
                 case "0":
@@ -119,6 +128,8 @@ public class TsfyUI {
         }
     }
 
+
+    // ==== USUARIO
     private Usuario autenticar() {
 
         System.out.println("Informe seu cpf:");
@@ -136,6 +147,7 @@ public class TsfyUI {
         return fachada.buscarUsuarioPorCpf(cpf);
     }
 
+    // ==== MUSICA
     private void criarMusica() {
 
         System.out.println("Qual é o título da musica?");
@@ -223,6 +235,74 @@ public class TsfyUI {
         }
     }
 
+    private void editarMusica(){
+
+        listarMusicas();
+
+        System.out.println("Digite o título da música que deseja editar:");
+
+        String tituloAtual = sc.nextLine();
+
+        System.out.println("Novo título:");
+
+        String novoTitulo = sc.nextLine();
+
+        System.out.println("Novo compositor:");
+
+        String compositor = sc.nextLine();
+
+        System.out.println("Novo intérprete:");
+
+        String interprete = sc.nextLine();
+
+        System.out.println("Nova duração:");
+
+        double duracao = Double.parseDouble(
+                sc.nextLine().replace(",", ".")
+        );
+
+
+        boolean editou =
+                fachada.editarMusica(
+                        tituloAtual,
+                        novoTitulo,
+                        compositor,
+                        interprete,
+                        duracao
+                );
+
+        if(editou){
+
+            System.out.println("Música editada com sucesso.");
+
+        } else {
+
+            System.out.println("Música não encontrada.");
+        }
+    }
+    
+    private void removerMusica(){
+
+        listarMusicas();
+
+        System.out.println("Digite o título da música que deseja remover:");
+
+        String titulo = sc.nextLine();
+
+        boolean removeu =fachada.removerMusica(titulo);
+
+        if(removeu){
+
+            System.out.println("Música removida com sucesso.");
+
+        } else {
+
+            System.out.println("Música não encontrada.");
+        }
+    }
+    
+    
+    // ===== PLAYLIST
     private void adicionarMusicaNaPlaylist(Usuario usuarioLogado){
 
         System.out.println("--- Suas playlists ---");

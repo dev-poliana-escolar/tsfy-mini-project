@@ -63,6 +63,21 @@ public class FachadaFrontend {
         return controladorDeMusica.listarMusicas();
     }
 
+    public boolean editarMusica(String tituloAtual,String novoTitulo,String compositor,String interprete,double duracao){
+        return controladorDeMusica.editarMusica(
+                tituloAtual,
+                novoTitulo,
+                compositor,
+                interprete,
+                duracao
+        );
+    }
+
+    public boolean removerMusica(String titulo){
+
+        return controladorDeMusica.removerMusica(titulo);
+    }
+    
     // =========================
     // PLAYLIST
     // =========================

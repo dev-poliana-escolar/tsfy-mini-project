@@ -1,52 +1,121 @@
 package br.edu.ifpar.tsi3.tsfy.UI.fachada;
 
+import br.edu.ifpar.tsi3.tsfy.dominio.Musica;
+import br.edu.ifpar.tsi3.tsfy.dominio.Playlist;
+import br.edu.ifpar.tsi3.tsfy.dominio.Usuario;
 import controladores.MusicaControlador;
 import controladores.PlaylistControlador;
 import controladores.UsuarioControlador;
 
+import java.util.ArrayList;
+
 public class FachadaFrontend {
+
     private MusicaControlador controladorDeMusica;
     private PlaylistControlador controladorDePlaylist;
     private UsuarioControlador controladorDeUsuario;
 
-    public FachadaFrontend(){
+    public FachadaFrontend() {
         this.controladorDeMusica = new MusicaControlador();
         this.controladorDePlaylist = new PlaylistControlador();
         this.controladorDeUsuario = new UsuarioControlador();
     }
 
-    public MusicaControlador getControladorDeMusica() {
-        return controladorDeMusica;
+    // =========================
+    // USUÁRIO
+    // =========================
+
+    public boolean cadastrarUsuario(String cpf, String nome, String senha) {
+        return controladorDeUsuario.cadastrarUsuario(cpf, nome, senha);
     }
 
-    public void setControladorDeMusica(MusicaControlador controladorDeMusica) {
-        this.controladorDeMusica = controladorDeMusica;
+    public boolean autenticarUsuario(String cpf, String senha) {
+        return controladorDeUsuario.autenticarUsuario(cpf, senha);
     }
 
-    public PlaylistControlador getControladorDePlaylist() {
-        return controladorDePlaylist;
+    public Usuario buscarUsuarioPorCpf(String cpf) {
+        return controladorDeUsuario.buscarUsuarioPorCpf(cpf);
     }
 
-    public void setControladorDePlaylist(PlaylistControlador controladorDePlaylist) {
-        this.controladorDePlaylist = controladorDePlaylist;
+    public ArrayList<Usuario> listarUsuarios() {
+        return controladorDeUsuario.listarUsuarios();
     }
 
-    public UsuarioControlador getControladorDeUsuario() {
-        return controladorDeUsuario;
+    // =========================
+    // MÚSICA
+    // =========================
+
+    public boolean cadastrarMusica(String titulo, String compositor,String interprete,double duracao) {
+
+        return controladorDeMusica.cadastrarMusica(
+                titulo,
+                compositor,
+                interprete,
+                duracao
+        );
     }
 
-    public void setControladorDeUsuario(UsuarioControlador controladorDeUsuario) {
-        this.controladorDeUsuario = controladorDeUsuario;
+    public Musica buscarMusica(String titulo) {
+        return controladorDeMusica.buscarMusica(titulo);
     }
 
-    public boolean registrarMusica(String titulo, String compositor, String interprete, Double duracao) {
-        boolean sucesso = this.controladorDeMusica.registrarMusica(titulo, compositor, interprete, duracao);
-        return sucesso;
+    public ArrayList<Musica> listarMusicas() {
+        return controladorDeMusica.listarMusicas();
     }
 
+    // =========================
+    // PLAYLIST
+    // =========================
 
+    public boolean criarPlaylist(String cpfUsuario,String nomePlaylist,String descricao) {
 
+        Usuario usuario = controladorDeUsuario.buscarUsuarioPorCpf(cpfUsuario);
+
+        return controladorDePlaylist.criarPlaylist(
+                usuario,
+                nomePlaylist,
+                descricao
+        );
+    }
+
+    public Playlist buscarPlaylist(String cpfUsuario,String nomePlaylist) {
+
+        Usuario usuario =
+                controladorDeUsuario.buscarUsuarioPorCpf(cpfUsuario);
+
+        return controladorDePlaylist.buscarPlaylist(
+                usuario,
+                nomePlaylist
+        );
+    }
+
+    public boolean adicionarMusicaNaPlaylist(String cpfUsuario,String nomePlaylist, String tituloMusica) {
+
+        Usuario usuario = controladorDeUsuario.buscarUsuarioPorCpf(cpfUsuario);
+
+        Playlist playlist =controladorDePlaylist.buscarPlaylist(
+                        usuario,
+                        nomePlaylist
+                );
+
+        Musica musica = controladorDeMusica.buscarMusica(tituloMusica);
+
+        return controladorDePlaylist.adicionarMusicaNaPlaylist(
+                playlist,
+                musica
+        );
+    }
+
+    public Playlist[] listarPlaylistsDoUsuario(String cpfUsuario){
+
+        Usuario usuario =
+                controladorDeUsuario
+                        .buscarUsuarioPorCpf(cpfUsuario);
+
+        if(usuario == null){
+            return null;
+        }
+
+        return usuario.getPlaylists();
+    }
 }
-
-
-

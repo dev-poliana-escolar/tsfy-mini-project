@@ -115,9 +115,7 @@ public class FachadaFrontend {
 
     public Playlist[] listarPlaylistsDoUsuario(String cpfUsuario){
 
-        Usuario usuario =
-                controladorDeUsuario
-                        .buscarUsuarioPorCpf(cpfUsuario);
+        Usuario usuario =controladorDeUsuario.buscarUsuarioPorCpf(cpfUsuario);
 
         if(usuario == null){
             return null;
@@ -125,4 +123,52 @@ public class FachadaFrontend {
 
         return usuario.getPlaylists();
     }
+
+
+        public boolean removerMusicaDaPlaylist(String cpfUsuario,String nomePlaylist,String tituloMusica,String interpreteMusica){
+
+                Usuario usuario =controladorDeUsuario.buscarUsuarioPorCpf(cpfUsuario);
+
+                Playlist playlist =controladorDePlaylist.buscarPlaylist(usuario,nomePlaylist);
+
+                Musica musica =controladorDeMusica.buscarMusica(
+                                        tituloMusica,
+                                        interpreteMusica
+                                );
+
+                return controladorDePlaylist.removerMusicaDaPlaylist(playlist,musica);
+        }
+
+        public boolean excluirPlaylist(String cpfUsuario,String nomePlaylist){
+
+        Usuario usuario =controladorDeUsuario.buscarUsuarioPorCpf(cpfUsuario);
+
+        return controladorDePlaylist.excluirPlaylist(usuario,nomePlaylist);
+        }
+
+        public boolean editarPlaylist(String cpfUsuario,String nomeAtual,String novoNome,String novaDescricao){
+
+        Usuario usuario =controladorDeUsuario.buscarUsuarioPorCpf(cpfUsuario);
+
+        return controladorDePlaylist.editarPlaylist(usuario,nomeAtual,novoNome,novaDescricao);
+        }
+
+        public ArrayList<Musica> listarMusicasDaPlaylist(String cpfUsuario,String nomePlaylist){
+
+        Usuario usuario =
+                controladorDeUsuario
+                        .buscarUsuarioPorCpf(cpfUsuario);
+
+        Playlist playlist =
+                controladorDePlaylist
+                        .buscarPlaylist(
+                                usuario,
+                                nomePlaylist
+                        );
+
+        return controladorDePlaylist
+                .listarMusicasDaPlaylist(
+                        playlist
+                );
+        }
 }

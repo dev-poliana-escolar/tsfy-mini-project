@@ -73,5 +73,9 @@ public class Usuario {
         this.qtdPlaylists++;
     }
 
+    public void setQtdPlaylists(int qtdPlaylists) {
+        this.qtdPlaylists = qtdPlaylists;
+    }
+
     
 }

@@ -68,8 +68,14 @@ public class TsfyUI {
             System.out.println("2 - Listar músicas");
             System.out.println("3 - Editar música");
             System.out.println("4 - Remover música");
-            System.out.println("5 - Criar playlist");
-            System.out.println("6 - Adicionar música na playlist");
+            System.out.println("5 - Buscar música por título");
+            System.out.println("6 - Criar playlist");
+            System.out.println("7 - Adicionar música na playlist");
+            System.out.println("8 - Remover música da playlist");
+            System.out.println("9 - Listar músicas da playlist");
+            System.out.println("10 - Editar playlist");
+            System.out.println("11 - Excluir playlist");
+            System.out.println("12 - Listar playlists do usuário");
             System.out.println("0 - Sair");
 
             String opcao = sc.nextLine();
@@ -88,10 +94,28 @@ public class TsfyUI {
                     removerMusica();
                     break;
                 case "5":
-                    criarPlaylist(usuarioLogado);
+                    buscarMusicaPorTitulo();
                     break;
                 case "6":
+                    criarPlaylist(usuarioLogado);
+                    break;
+                case "7":
                     adicionarMusicaNaPlaylist(usuarioLogado);
+                    break;
+                case "8":
+                    removerMusicaDaPlaylist(usuarioLogado);
+                    break;
+                case "9":
+                    listarMusicasDaPlaylist(usuarioLogado);
+                    break;
+                case "10":
+                    editarPlaylist(usuarioLogado);
+                    break;
+                case "11":
+                    excluirPlaylist(usuarioLogado);
+                    break;
+                case "12":
+                    listarPlaylistDoUsuario(usuarioLogado);
                     break;
                 case "0":
                     return;
@@ -102,6 +126,7 @@ public class TsfyUI {
         }
     }
 
+    // ==== USUARIO
     private void criarNovoUsuario() {
         System.out.println("Informe seu nome:");
         String nome = sc.nextLine();
@@ -127,9 +152,7 @@ public class TsfyUI {
             );
         }
     }
-
-
-    // ==== USUARIO
+    
     private Usuario autenticar() {
 
         System.out.println("Informe seu cpf:");
@@ -305,6 +328,30 @@ public class TsfyUI {
         }
     }
     
+    private void buscarMusicaPorTitulo(){
+
+        System.out.println("Digite o título da música que deseja buscar:");
+
+        String titulo = sc.nextLine();
+
+        ArrayList<Musica> musicasEncontradas =fachada.buscarMusicaPorTitulo(titulo);
+
+        if(musicasEncontradas.isEmpty()){
+
+            System.out.println("Nenhuma música encontrada com esse título.");
+            return;
+        }
+
+        for(Musica musica : musicasEncontradas){
+
+            System.out.println(
+                    musica.getTitulo()
+                            + " (intérprete: "
+                            + musica.getInterprete()
+                            + ")"
+            );
+        }
+    }
     
     // ===== PLAYLIST
     private void adicionarMusicaNaPlaylist(Usuario usuarioLogado){
@@ -371,4 +418,227 @@ public class TsfyUI {
         }
     }
         
- }
+    private void removerMusicaDaPlaylist(
+        Usuario usuarioLogado){
+
+    System.out.println(
+            "--- Suas playlists ---"
+    );
+
+    Playlist[] playlists =
+            fachada.listarPlaylistsDoUsuario(
+                    usuarioLogado.getCpf()
+            );
+
+    for(int i = 0;
+        i < usuarioLogado.getQtdPlaylists();
+        i++){
+
+        System.out.println(
+                playlists[i].getNome()
+        );
+    }
+
+    System.out.println(
+            "Digite o nome da playlist:"
+    );
+
+    String nomePlaylist =
+            sc.nextLine();
+
+    ArrayList<Musica> musicas =
+            fachada.listarMusicasDaPlaylist(
+                    usuarioLogado.getCpf(),
+                    nomePlaylist
+            );
+
+    if(musicas == null || musicas.isEmpty()){
+
+        System.out.println(
+                "Playlist vazia."
+        );
+
+        return;
+    }
+
+    for(Musica musica : musicas){
+
+        System.out.println(
+                musica.getTitulo()
+                        + " - "
+                        + musica.getInterprete()
+        );
+    }
+
+    System.out.println(
+            "Digite o título da música:"
+    );
+
+    String titulo =
+            sc.nextLine();
+
+    System.out.println(
+            "Digite o intérprete:"
+    );
+
+    String interprete =
+            sc.nextLine();
+
+    boolean removeu =
+            fachada.removerMusicaDaPlaylist(
+                    usuarioLogado.getCpf(),
+                    nomePlaylist,
+                    titulo,
+                    interprete
+            );
+
+    if(removeu){
+
+        System.out.println(
+                "Música removida da playlist."
+        );
+
+    } else {
+
+        System.out.println(
+                "Não foi possível remover."
+        );
+    }
+}
+ 
+    private void listarMusicasDaPlaylist(
+        Usuario usuarioLogado){
+
+    System.out.println(
+            "--- Suas playlists ---"
+    );
+
+    Playlist[] playlists =
+            fachada.listarPlaylistsDoUsuario(
+                    usuarioLogado.getCpf()
+            );
+
+    for(int i = 0;
+        i < usuarioLogado.getQtdPlaylists();
+        i++){
+
+        System.out.println(
+                playlists[i].getNome()
+        );
+    }
+
+    System.out.println(
+            "Digite o nome da playlist:"
+    );
+
+    String nomePlaylist =
+            sc.nextLine();
+
+    ArrayList<Musica> musicas =
+            fachada.listarMusicasDaPlaylist(
+                    usuarioLogado.getCpf(),
+                    nomePlaylist
+            );
+
+    if(musicas == null || musicas.isEmpty()){
+
+        System.out.println(
+                "Playlist vazia."
+        );
+
+        return;
+    }
+
+    for(Musica musica : musicas){
+
+        System.out.println(
+                musica.getTitulo()
+                        + " - "
+                        + musica.getInterprete()
+        );
+    }
+}
+
+    private void editarPlaylist(
+        Usuario usuarioLogado){
+
+        System.out.println("Nome atual da playlist:");
+
+        String nomeAtual =sc.nextLine();
+
+        System.out.println("Novo nome:");
+
+        String novoNome =sc.nextLine();
+
+        System.out.println("Nova descrição:");
+
+        String novaDescricao =sc.nextLine();
+
+        boolean editou =
+                fachada.editarPlaylist(
+                        usuarioLogado.getCpf(),
+                        nomeAtual,
+                        novoNome,
+                        novaDescricao
+                );
+
+        if(editou){
+            System.out.println("Playlist editada.");
+
+        } else {
+            System.out.println("Não foi possível editar.");
+        }
+    }
+
+
+    private void excluirPlaylist(
+        Usuario usuarioLogado){
+
+        System.out.println(
+                "Digite o nome da playlist:"
+        );
+
+        String nomePlaylist =
+                sc.nextLine();
+
+        boolean excluiu =
+                fachada.excluirPlaylist(
+                        usuarioLogado.getCpf(),
+                        nomePlaylist
+                );
+
+        if(excluiu){
+
+            System.out.println(
+                    "Playlist excluída."
+            );
+
+        } else {
+
+            System.out.println(
+                    "Playlist não encontrada."
+            );
+        }
+    }
+
+    private void listarPlaylistDoUsuario(Usuario usuarioLogado){
+
+        Playlist[] playlists = fachada.listarPlaylistsDoUsuario(usuarioLogado.getCpf());
+
+        if(playlists == null || usuarioLogado.getQtdPlaylists() ==0){
+            System.out.println("Você não possui playlists.");
+            return;
+        }else {
+
+            System.out.println("--- Suas playlists ---");
+        }
+
+        for(int i = 0; i < usuarioLogado.getQtdPlaylists(); i++){
+
+            System.out.println(
+                    playlists[i].getNome()
+            );  
+        }
+    }
+
+}
